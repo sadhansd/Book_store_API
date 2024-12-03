@@ -1,6 +1,8 @@
 from fastapi import FastAPI,HTTPException,APIRouter
 from services.service import *
-from model.models import BookData
+from model.models import BookData,Book
+
+from error.error_handler import InvalidIDError
 
 book_router = APIRouter()
 
@@ -9,9 +11,10 @@ def get_data():
     records = get_all()
     return records
 
-@book_router.get("/{book_id}")
+@book_router.get("/{book_id}", response_model=Book)
 def get_data(book_id: int):
     records = get_book_id(book_id)
+    if not records: raise InvalidIDError(detail=f"ID[{book_id}] not found")
     return records
 
 @book_router.post("/add")
@@ -27,3 +30,4 @@ def delete_data(book_id: int):
 def update_data(book_id: int, updated_data: BookData):
     record = update_book(book_id,updated_data)
     return record
+
