@@ -1,10 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,status
 import uvicorn
 from contextlib import asynccontextmanager
 from database.database import init_db
 from services.service import *
 from routes.crud import book_router
 from routes.auth import auth
+from error.error_handler import InvalidIDError,Invalid_exception_handler
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -22,6 +23,10 @@ app = FastAPI(
 app.include_router(book_router, prefix="/book")
 app.include_router(auth)
 
+app.add_exception_handler(
+    InvalidIDError,
+    Invalid_exception_handler
+)
 
 if __name__ == "__main__":
     
