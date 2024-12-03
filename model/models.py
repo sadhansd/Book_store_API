@@ -12,8 +12,18 @@ class BookData(SQLModel, table=True):
     Description: Optional[str] = Field(default=None)
     Category : Optional[str] = Field(default=None)
     Publisher: Optional[str] = Field(default=None)
-    Price: int
-    Publish_Month:Optional[int] = Field(default=None)
+    Price: float
+    Publish_Month:Optional[str] = Field(default=None)
     Publish_Date:Optional[int] = Field(default=None)
     
     
+class Book(BaseModel):
+    id: Optional[int] = None
+    Title: str
+    Authors: str
+    Description: Optional[str] = None
+    Category : Optional[str] = None
+    Publisher: Optional[str] = None
+    Price: float
+    Publish_Month:Optional[str] = None
+    Publish_Date:Optional[int] = None

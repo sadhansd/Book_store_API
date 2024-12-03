@@ -30,7 +30,7 @@ user_dependency = Annotated[dict, Depends(get_current_user)]
 @auth.get('/')
 async def user(user: user_dependency):
     if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid User")
     return{'user': user}
 
 @auth.get('/allUsers')
