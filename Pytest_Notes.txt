@@ -1,0 +1,105 @@
+Pytest:
+
+INSTALL:
+- pip install pytest
+
+BASIC TEST
+
+import pytest
+from package import my_func as func
+
+def test_get_book_id():
+     assert func.add(2,3) == 5
+
+TEST RAISE ERROR
+def test_invalidID():
+     with pytest.raises(InvalidIDError):
+         crud.get_book_id(10000)
+
+RUN COMMAND
+pytest test/test_func.py
+
+CLASS BASED TESTING
+
+class Test_service:
+    
+    def setup_method(self, method):
+        print(f"setting up {method}")
+        self.id = 10
+        
+    def teardown_method(self,method):
+        print(f"tearing down {method}")
+        del self.id
+    
+    def test_get_book_id(self):
+        assert crud.get_book_id(self.id)
+
+setup_method -> run first
+teardown_method -> run last
+
+- class name should always begin with 'Test'
+- to print the print statements => use -s in run command
+
+FIXATURES
+
+@pytest.fixture
+def validID():
+    return 10
+
+@pytest.fixture
+def invalidID():
+    return 10000
+
+def test_get_book_id(validID):
+    assert crud.get_book_id(validID)
+
+def test_invalidID(invalidID):
+    with pytest.raises(InvalidIDError):
+        crud.get_book_id(invalidID)
+
+to make the fixatures global, 
+1. create a new file -> conftest.py
+2. write fixatures
+
+MARKS
+
+SKIP
+@pytest.mark.skip(reason="it is a exception")
+def test_invalidID(invalidID):
+    with pytest.raises(InvalidIDError):
+        crud.get_book_id(invalidID)
+
+PARAMETERIZED
+@pytest.mark.parametrize("id",[10, 12, 15])
+def test_get_book_id(id):
+    assert crud.get_book_id(id)
+
+for more than one value,
+@pytest.mark.parametrize("id",[ (1,2), (3,4) ])
+
+MOCKING
+
+- fake database
+1. create a sep file -> create a dict -> create a func to get required val
+
+import unittest.mock as mock
+
+@mock.patch("database.mockDB.get_book_from_db")
+def test_get_book_from_db(mock_get_book):
+    mock_get_book.return_value = value
+    book = mdb.get_book_from_db(1)
+    assert book == value
+
+API TESTING
+
+- install pytest
+- install httpx
+client = TestClient(app)
+
+def test_get_all():
+    response = client.get("/book/")
+    assert response.status_code == 200
+
+def test_create_book():
+    response = client.post("/book/add", json = {post_data})
+    assert response.status_code == 200
