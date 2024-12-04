@@ -1,6 +1,9 @@
 from database.database import init_db,get_session,get_engine
 from sqlmodel import Session,select
 from model.models import BookData
+import pandas as pd
+from error.error_handler import InvalidIDError
+
 
 engine = get_engine()
 
@@ -12,6 +15,7 @@ def get_all():
 def get_book_id(id):
     with Session(engine) as session:
         record = session.get(BookData,id)
+        if not record: raise InvalidIDError(detail=f"ID[{id}] not found")
         return record
     
 def add_book(book):

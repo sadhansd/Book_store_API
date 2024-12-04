@@ -24,6 +24,6 @@ class Book(BaseModel):
     Description: Optional[str] = None
     Category : Optional[str] = None
     Publisher: Optional[str] = None
-    Price: float
+    Price: Optional[float] = None
     Publish_Month:Optional[str] = None
     Publish_Date:Optional[int] = None
